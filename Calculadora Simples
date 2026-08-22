@@ -1,0 +1,29 @@
+import java.util.Locale;
+import java.util.Scanner;
+
+public class CalculadoraSimples {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
+
+        System.out.print("Digite o primeiro número inteiro: ");
+        int a = sc.nextInt();
+
+        System.out.print("Digite o segundo número inteiro: ");
+        int b = sc.nextInt();
+
+        System.out.println("\n--- Resultados ---");
+        System.out.println("Soma: " + (a + b));
+        System.out.println("Subtração: " + (a - b));
+        System.out.println("Multiplicação: " + (a * b));
+
+        if (b != 0) {
+            double divisao = (double) a / b;
+            System.out.printf("Divisão: %.2f%n", divisao);
+        } else {
+            System.out.println("Divisão: não é possível dividir por zero.");
+        }
+
+        sc.close();
+    }
+}
