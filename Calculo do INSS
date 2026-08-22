@@ -1,0 +1,36 @@
+import java.util.Locale;
+import java.util.Scanner;
+
+public class CalculoINSS {
+
+    private static final double TETO_SALARIO = 8475.55;
+    private static final double TETO_CONTRIBUICAO = 988.09;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
+
+        System.out.print("Digite o salário bruto (ex: 3000.00): ");
+        double salarioBruto = sc.nextDouble();
+
+        double contribuicao;
+
+        if (salarioBruto > TETO_SALARIO) {
+            contribuicao = TETO_CONTRIBUICAO;
+        } else if (salarioBruto <= 1621.00) {
+            contribuicao = salarioBruto * 0.075;
+        } else if (salarioBruto <= 2902.84) {
+            contribuicao = salarioBruto * 0.09 - 24.32;
+        } else if (salarioBruto <= 4354.27) {
+            contribuicao = salarioBruto * 0.12 - 111.40;
+        } else {
+            contribuicao = salarioBruto * 0.14 - 198.49;
+        }
+
+        double salarioLiquido = salarioBruto - contribuicao;
+
+        System.out.printf("%nContribuição ao INSS: R$ %.2f%n", contribuicao);
+        System.out.printf("Salário líquido (após INSS): R$ %.2f%n", salarioLiquido);
+
+        sc.close();
+    }
+}
