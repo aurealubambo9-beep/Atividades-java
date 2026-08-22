@@ -1,0 +1,76 @@
+import java.util.Locale;
+import java.util.Scanner;
+
+public class CalculoIR {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in).useLocale(Locale.US);
+
+        System.out.print("Digite o salário bruto (ex: 6000.00): ");
+        double salarioBruto = sc.nextDouble();
+
+        double inss = calcularINSS(salarioBruto);
+        double baseCalculo = salarioBruto - inss;
+
+        double imposto = calcularIRPelaTabela(baseCalculo);
+        double redutor = calcularRedutorLei15270(salarioBruto);
+
+        double impostoFinal;
+        if (salarioBruto <= 5000.00) {
+            // Lei nº 15.270/2025: isenção efetiva para renda até R$ 5.000,00
+            redutor = imposto;
+            impostoFinal = 0;
+        } else {
+            impostoFinal = imposto - redutor;
+            if (impostoFinal < 0) {
+                impostoFinal = 0;
+            }
+        }
+
+        System.out.printf("%nContribuição ao INSS: R$ %.2f%n", inss);
+        System.out.printf("Base de cálculo do IR: R$ %.2f%n", baseCalculo);
+        System.out.printf("Imposto de Renda (tabela progressiva): R$ %.2f%n", imposto);
+        System.out.printf("Redutor (Lei nº 15.270/2025): R$ %.2f%n", redutor);
+        System.out.printf("Imposto de Renda a pagar: R$ %.2f%n", impostoFinal);
+    }
+
+    private static double calcularINSS(double salarioBruto) {
+        final double TETO_SALARIO = 8475.55;
+        final double TETO_CONTRIBUICAO = 988.09;
+
+        if (salarioBruto > TETO_SALARIO) {
+            return TETO_CONTRIBUICAO;
+        } else if (salarioBruto <= 1621.00) {
+            return salarioBruto * 0.075;
+        } else if (salarioBruto <= 2902.84) {
+            return salarioBruto * 0.09 - 24.32;
+        } else if (salarioBruto <= 4354.27) {
+            return salarioBruto * 0.12 - 111.40;
+        } else {
+            return salarioBruto * 0.14 - 198.49;
+        }
+    }
+
+    private static double calcularIRPelaTabela(double base) {
+        if (base <= 2428.80) {
+            return 0;
+        } else if (base <= 2826.65) {
+            return base * 0.075 - 182.16;
+        } else if (base <= 3751.05) {
+            return base * 0.15 - 394.16;
+        } else if (base <= 4664.68) {
+            return base * 0.225 - 675.49;
+        } else {
+            return base * 0.275 - 908.73;
+        }
+    }
+
+    private static double calcularRedutorLei15270(double rendaBruta) {
+        if (rendaBruta <= 7350.00) {
+            double redutor = 978.62 - (0.133145 * rendaBruta);
+            return Math.max(redutor, 0);
+        } else {
+            return 0;
+        }
+    }
+}
